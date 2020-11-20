@@ -8,11 +8,11 @@
 
 # Preprocessing
 
-## Shuffle
-
-## Buffor
+## Shuffle i buffor
 
 ## Batching
+
+## Caching
 
 ## TFRecord
 
