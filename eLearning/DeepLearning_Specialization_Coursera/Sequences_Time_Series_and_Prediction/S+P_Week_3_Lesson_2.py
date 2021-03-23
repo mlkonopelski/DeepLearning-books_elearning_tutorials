@@ -86,15 +86,18 @@ history = model.fit(train_set,
 
 plt.semilogx(history.history['lr'], history.history['loss'])
 plt.axis([1e-8, 1e-4, 0, 30])
-plt.show()
+#plt.show()
 
 # Model with new LR
+tf.keras.backend.clear_session()
+
 model = tf.keras.Sequential([
     tf.keras.layers.Lambda(lambda x: tf.expand_dims(x, axis=-1),
                            input_shape=[None]),
     tf.keras.layers.SimpleRNN(40, return_sequences=True),
     tf.keras.layers.SimpleRNN(40),
-    tf.keras.layers.Dense(1)
+    tf.keras.layers.Dense(1),
+    tf.keras.layers.Lambda(lambda x: x*100.0)
 ])
 
 model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=5e-5, momentum=0.9),
@@ -116,4 +119,4 @@ plot_series(time_valid, series_valid)
 plot_series(time_valid, results)
 plt.show()
 
-print(tf.metrics.mae(series_valid, results))
+print(tf.metrics.mae(series_valid, results).numpy())
