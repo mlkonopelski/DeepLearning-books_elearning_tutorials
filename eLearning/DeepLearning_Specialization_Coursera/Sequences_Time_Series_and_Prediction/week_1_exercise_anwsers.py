@@ -100,6 +100,7 @@ naive_forecast = series[split_time-1:-1]
 plt.figure(figsize=(10, 6))
 plot_series(time_valid, x_valid)
 plot_series(time_valid, naive_forecast)
+plt.show()
 
 # Expected output: Chart similar to above, but with forecast overlay
 
@@ -108,6 +109,7 @@ plot_series(time_valid, naive_forecast)
 plt.figure(figsize=(10, 6))
 plot_series(time_valid, x_valid, start=0, end=150)# YOUR CODE HERE)
 plot_series(time_valid, naive_forecast, start=1, end=151)# YOUR CODE HERE)
+plt.show()
 
 # EXPECTED - Chart with X-Axis from 1100-1250 and Y Axes with series value and projections. Projections should be time stepped 1 unit 'after' series
 
@@ -138,6 +140,7 @@ moving_avg = moving_average_forecast(series, 30)# YOUR CODE HERE)[# YOUR CODE HE
 plt.figure(figsize=(10, 6))
 plot_series(time_valid, x_valid)
 plot_series(time_valid, moving_avg)
+plt.show()
     
 # EXPECTED OUTPUT
 # CHart with time series from 1100->1450+ on X
@@ -161,10 +164,10 @@ plt.show()
 # EXPECETED OUTPUT: CHart with diffs
 
 """Great, the trend and seasonality seem to be gone, so now we can use the moving average:"""
-diff_moving_avg = moving_average_forecast(diff_series, 50)[split_time - 365:] # YOUR CODE HERE
+diff_moving_avg = moving_average_forecast(diff_series, 50) # YOUR CODE HERE
 
 plt.figure(figsize=(10, 6))
-plot_series(time_valid, diff_series)# YOUR CODE HERE)
+plot_series(time_valid, diff_series[split_time-365:])# YOUR CODE HERE)
 plot_series(time_valid, diff_moving_avg)# YOUR CODE HERE)
 plt.show()
             
@@ -181,27 +184,26 @@ plot_series(time_valid, diff_moving_avg_plus_past)# YOUR CODE HERE)
 plt.show()
 # Expected output: Chart from 1100->1450+ on X. Same chart as earlier for time series, but projection overlaid looks close in value to it
 
-print()# YOUR CODE HERE)
-print()# YOUR CODE HERE)
+print(keras.metrics.mean_squared_error(x_valid, diff_moving_avg_plus_past).numpy())# YOUR CODE HERE)
+print(keras.metrics.mean_absolute_error(x_valid, diff_moving_avg_plus_past).numpy())# YOUR CODE HERE)
 # EXPECTED OUTPUT
 # 8.498155
 # 2.327179
 
 """Better than naive forecast, good. However the forecasts look a bit too random, because we're just adding past values, which were noisy. Let's use a moving averaging on past values to remove some of the noise:"""
 
-#todo
-diff_moving_avg_plus_smooth_past = 999# YOUR CODE HERE
+diff_moving_avg_plus_smooth_past = moving_average_forecast(series[split_time-370:-360], 10) + diff_moving_avg # YOUR CODE HERE
 
 plt.figure(figsize=(10, 6))
-plot_series(time_valid, )# YOUR CODE HERE)
-plot_series(time_valid, )# YOUR CODE HERE)
+plot_series(time_valid, diff_moving_avg_plus_smooth_past)# YOUR CODE HERE)
+plot_series(time_valid, diff_moving_avg_plus_smooth_past)# YOUR CODE HERE)
 plt.show()
             
 # EXPECTED OUTPUT:
 # Similar chart to above, but the overlaid projections are much smoother
 
-print()# YOUR CODE HERE)
-print()# YOUR CODE HERE)
+print(keras.metrics.mean_squared_error(x_valid, diff_moving_avg_plus_smooth_past).numpy())# YOUR CODE HERE)
+print(keras.metrics.mean_squared_error(x_valid, diff_moving_avg_plus_smooth_past).numpy())# YOUR CODE HERE)
 # EXPECTED OUTPUT
 # 12.527958
 # 2.2034433
