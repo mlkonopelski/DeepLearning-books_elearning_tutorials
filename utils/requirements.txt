@@ -1,8 +1,0 @@
-tensorflow=2.3
-PIL
-pandas
-numpy
-jupyter
-sklearn
-statsmodels
-hyperopt
