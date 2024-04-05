@@ -1,12 +1,16 @@
 .DS_Store
 .conda
+.data/
+.video/
 Tutorials/blog_torch_in_a_day/data/
 Tutorials/blog_torch_in_a_day/models/
 Tutorials/blog_torch_in_a_day/slides/
 Tutorials/official_torch/models/
+*.mp4
+__pycache__
 
 # Byte-compiled / optimized / DLL files
-__pycache__/
+`__pycache__/
 *.py[cod]
 *$py.class
 
