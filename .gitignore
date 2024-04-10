@@ -8,6 +8,7 @@ Tutorials/blog_torch_in_a_day/slides/
 Tutorials/official_torch/models/
 *.mp4
 __pycache__
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 `__pycache__/
