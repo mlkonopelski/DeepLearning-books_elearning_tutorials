@@ -1,3 +1,9 @@
+"""
+We create a base class to dynmically create other classes e.g. based on argument passed. 
+One example could be Train factory to create Train,Val,Test classes based on argument.
+Each will have some comon methods to ovewrite and their own.
+"""
+
 from abc import ABCMeta, abstractmethod
 
 class IPerson(metaclass=ABCMeta):
