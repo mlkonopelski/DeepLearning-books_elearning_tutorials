@@ -15,12 +15,13 @@ class Head(nn.Module):
         
     def forward(self, x):
         B, T, C = x.shape
-        q = self.query(x)
-        k = self.key(x)
+        q = self.query(x)   # (B, T, head_size)
+        k = self.key(x)     # (B, T, head_size)
         
-        wei = q @ k.transpose(-2, -1) * C**-0.5
-        wei = wei.masked_fill(mask = self.tril[:T, :T] == 0, value=float('-inf'))
-        wei = F.softmax(wei, dim=-1)
+        wei = q @ k.transpose(-2, -1)     # MatMul (B, T, T)
+        wei = wei * C**-0.5     # Scale
+        wei = wei.masked_fill(mask = self.tril[:T, :T] == 0, value=float('-inf'))   # masked (Opt.)
+        wei = F.softmax(wei, dim=-1)        # Softmax
         wei = self.dropout(wei )
         
         v = self.value(x)
@@ -63,9 +64,9 @@ class Block(nn.Module):
     def forward(self, x):
         x = x + self.sa_head(self.ln1(x))
         x = x + self.ffwd(self.ln2(x))
-        return x
+        return x 
 
-class BigramLanguageModel(nn.Module):
+class GPTLanguageModel(nn.Module):
     def __init__(self, vocab_size, n_embed = 32, block_size = 8, heads = 4, blocks = 3, dropout=0.2, device = 'cpu') -> None:
         super().__init__()
         self.block_size = block_size
@@ -113,4 +114,29 @@ class BigramLanguageModel(nn.Module):
         return idx
     
 
+if __name__ == '__main__':
+     
+
+    ##############################################
+    # HEAD
+    ##############################################
+    # Visualize Head
+    torch.manual_seed(1337)
+    B, T, C = 4, 3, 32
+    x = torch.randn(B, T, C)
+
+    # let's see a single Head peform self-attention
+    head_size = 16
+    key = nn.Linear(C, head_size, bias=False)
+    query = nn.Linear(C, head_size, bias=False)
+    value = nn.Linear(C, head_size, bias=False)
+    k = key(x)
+    q = query(x)
+    v = value(x)
+    wei = q @ k.transpose(-2, -1) # (B, T, 16) @ (B, 16, T) ---> (B, T, T)
     
+    # add 0 mask so past tokens don't see future
+    tril = torch.tril(torch.ones(T, T))
+    wei = wei.masked_fill(tril==0, float('-inf'))
+    wei = F.softmax(wei, dim=-1)
+    out = wei @ v

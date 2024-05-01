@@ -16,10 +16,10 @@ MAX_ITER = 5000
 EVAL_ITER = 100
 LR_RATE = 3e-4 
 
-with open("config.yml", "r") as f:
-    config = yaml.safe_load(f)
+# with open("config.yml", "r") as f:
+#     config = yaml.safe_load(f)
 
-DEVICE = config['device']
+DEVICE = 'cpu' #config['device']
 
 start = datetime.now()
 # -----------------------------
